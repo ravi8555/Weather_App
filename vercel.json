@@ -7,7 +7,7 @@
       "config": {
         "distDir": "dist",
         "installCommand": "npm install",
-        "buildCommand": "npm run build",
+        "buildCommand": "NODE_ENV=production npm run build",
         "outputDirectory": "dist"
       }
     }
@@ -15,10 +15,10 @@
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "/$1",
-      "headers": {
-        "Cache-Control": "no-cache"
-      }
+      "dest": "/$1"
     }
-  ]
+  ],
+  "env": {
+    "NODE_ENV": "production"
+  }
 }

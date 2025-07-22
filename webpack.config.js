@@ -17,7 +17,7 @@ module.exports = (env, argv) => ({
   output: {
      path: path.resolve(__dirname, 'dist'),
     filename: 'js/[name].[contenthash].js',
-    // publicPath: '/', // Add this line (MOST IMPORTANT FIX)
+    publicPath: process.env.NODE_ENV === 'production' ? '' : '',
     clean: true // Ensure clean builds
   },
   optimization: {
@@ -104,7 +104,7 @@ module.exports = (env, argv) => ({
           title: name.title,
           template: path.resolve(__dirname, `src/${name.pageName}`),
           inject: 'body', // Explicitly inject scripts in body
-        hash: true // Add hash to prevent caching issues
+          hash: true // Add hash to prevent caching issues
         })
     ),
     new webpack.ProvidePlugin({
