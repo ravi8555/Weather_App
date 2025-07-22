@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= htmlWebpackPlugin.options.title %></title>
+    <link rel="icon" src="assets/img/favicon.ico" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Poppins:wght@200;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+    
+
+        </style>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+  <style>
+    #map { height: 100vh; width: 100%; }
+  </style>
+   </head>
+   <body>
+    
+     <div id="map"></div>
+   		  <div class="wrapper" style="">
+	   		<div class="container">
+  <h1>Weather Forecast</h1>
+  <div id="sb-search" class="sb-search">
+						<form id="weather-form">
+							<input class="sb-search-input" placeholder="Enter your search term..." type="search" name="search" id="location-input">
+
+							<input type="submit" class="sb-search-submit" id="search-button" />
+
+							<span class="sb-icon-search" >
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"> 
+        <path fill="currentColor" d="m19.6 21l-6.3-6.3q-.75.6-1.725.95T9.5 16q-2.725 0-4.612-1.888T3 9.5t1.888-4.612T9.5 3t4.613 1.888T16 9.5q0 1.1-.35 2.075T14.7 13.3l6.3 6.3zM9.5 14q1.875 0 3.188-1.312T14 9.5t-1.312-3.187T9.5 5T6.313 6.313T5 9.5t1.313 3.188T9.5 14" />
+      </svg>
+
+              </span>
+						</form>
+					</div>
+  <!-- <div id="search-box">
+ 
+  <form id="weather-form" class="search-box" >
+    <input type="text" name="location" placeholder="Search..." id="location-input">
+    <button type="submit" aria-label="Search"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" id="search-button"> 
+        <path fill="currentColor" d="m19.6 21l-6.3-6.3q-.75.6-1.725.95T9.5 16q-2.725 0-4.612-1.888T3 9.5t1.888-4.612T9.5 3t4.613 1.888T16 9.5q0 1.1-.35 2.075T14.7 13.3l6.3 6.3zM9.5 14q1.875 0 3.188-1.312T14 9.5t-1.312-3.187T9.5 5T6.313 6.313T5 9.5t1.313 3.188T9.5 14" />
+      </svg></button>
+  </form>
+   </div> -->
+  <p class="errTxt" id="errTxt"></p>
+  <div class="weather-details" id="weather-details">
+    <h2>Weather In <span id="location"></span></h2>
+    <div class="grid">
+      
+      
+      <div class="temperature">
+        <div class="currDate" id="currentDate"></div> 
+        <p class="temperatureTxt"><span id="temperature">0</span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M16.5 5c1.55 0 3 .47 4.19 1.28l-1.16 2.89A4.47 4.47 0 0 0 16.5 8C14 8 12 10 12 12.5s2 4.5 4.5 4.5c1.03 0 1.97-.34 2.73-.92l1.14 2.85A7.47 7.47 0 0 1 16.5 20A7.5 7.5 0 0 1 9 12.5A7.5 7.5 0 0 1 16.5 5M6 3a3 3 0 0 1 3 3a3 3 0 0 1-3 3a3 3 0 0 1-3-3a3 3 0 0 1 3-3m0 2a1 1 0 0 0-1 1a1 1 0 0 0 1 1a1 1 0 0 0 1-1a1 1 0 0 0-1-1" />
+          </svg></p>
+        <p id="weather-condition-name">Clear</p>
+        <div class="humidity"><img src="https://portfoliohub.in/weatherapp/images/humidity.svg" alt="humidity" width="64" height="64"><span id="humidity">0</span></div>
+      </div>
+        <ul class="info">
+          
+          <li><div class="currTime" id="currentTime"></div>
+            <img src="" alt="weather-icon" width="150" height="150" id="weather-condition-icon" /></li>
+          
+          <li><img src="https://portfoliohub.in/weatherapp/images/wind.svg" alt="wind-speed" width="64" height="64"><span id="wind-speed">0</span></li>
+        </ul>
+    </div>
+    <h2 class="forecast7">7 Days Forecast</h2>
+    <div class="daily-cards" id="daily-forecast"></div>
+  </div>
+</div>
+
+
+   		  </div>  
+ 
+
+   </body>
+</html>
