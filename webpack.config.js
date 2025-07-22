@@ -15,8 +15,10 @@ module.exports = (env, argv) => ({
   devtool: argv.mode === 'development' ? 'source-map' : false,
   entry: ['./src/assets/js/app.js', './src/assets/css/main.scss'],
   output: {
-    path: path.resolve(__dirname, 'dist'),
+     path: path.resolve(__dirname, 'dist'),
     filename: 'js/[name].[contenthash].js',
+    // publicPath: '/', // Add this line (MOST IMPORTANT FIX)
+    clean: true // Ensure clean builds
   },
   optimization: {
     splitChunks: { chunks: 'all' },
@@ -101,6 +103,8 @@ module.exports = (env, argv) => ({
           filename: name.pageName,
           title: name.title,
           template: path.resolve(__dirname, `src/${name.pageName}`),
+          inject: 'body', // Explicitly inject scripts in body
+        hash: true // Add hash to prevent caching issues
         })
     ),
     new webpack.ProvidePlugin({
