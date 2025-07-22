@@ -15,7 +15,10 @@
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "/$1"
+      "dest": "/$1",
+      "headers": {
+        "Cache-Control": "no-cache"
+      }
     }
   ]
 }
