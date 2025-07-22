@@ -17,7 +17,7 @@ module.exports = (env, argv) => ({
   output: {
      path: path.resolve(__dirname, 'dist'),
     filename: 'js/[name].[contenthash].js',
-    publicPath: process.env.NODE_ENV === 'production' ? '' : '',
+    publicPath: '',
     clean: true // Ensure clean builds
   },
   optimization: {
