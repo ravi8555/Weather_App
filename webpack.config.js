@@ -20,11 +20,12 @@ module.exports = (env, argv) => {
       styles: './src/assets/css/main.scss'
     },
     output: {
-      path: path.resolve(__dirname, 'dist'),
-      filename: isProduction ? 'js/[name].[contenthash].js' : 'js/[name].js',
-      publicPath: isProduction ? './' : '/', // Critical change
-      clean: true
-    },
+  path: path.resolve(__dirname, 'dist'),
+  filename: isProduction ? 'js/[name].[contenthash].js' : 'js/[name].js',
+  publicPath: './', // 
+  clean: true
+},
+
     plugins: [
       new Dotenv(),
       new CleanWebpackPlugin(),
