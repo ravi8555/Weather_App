@@ -7,8 +7,10 @@
 }
 body {
   position: relative;
-  /* background: url("https://portfoliohub.in/weatherapp/images/bg.webp")
-    no-repeat center/cover !important; */
+  // background: url("https://portfoliohub.in/weatherapp/images/bg.webp")
+  //   no-repeat center/cover !important;
+  background: url("../img/bg.jpg")
+    no-repeat center/cover !important;
   min-height: 100vh;
   display: flex;
   justify-content: center;
@@ -37,14 +39,14 @@ h2{    display: flex;
 .attr a:hover {
   text-decoration: underline;
 }
-.wrapper{position: absolute;z-index: 555;}
+.wrapper{position: absolute;z-index: 555;max-width:1050px;display: flex;width: 1050px;}
 .container {
   background: #fafafa;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5);
   width: 100%;
-  max-width:650px;
+  // max-width:950px;
  
   
 }
@@ -88,7 +90,7 @@ h2{    display: flex;
   color: #fff;
 }
 .container .weather-details {
-  display: none;
+  // display: none;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
@@ -102,7 +104,7 @@ h2{    display: flex;
 }
 .container .weather-details .grid {
   display: grid;
-  grid-template-columns:1.5fr 1.5fr;
+  grid-template-columns:1fr 1fr 2fr;
   gap: 10px;
 
   grid-row-start: row1-start;
@@ -113,7 +115,7 @@ h2{    display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  margin-left: 20px;
+  // margin-left: 20px;
 
   background: #f6eadb;
     box-shadow: 0 5px 10px rgb(0 0 0 / 10%);
@@ -137,7 +139,7 @@ h2{    display: flex;
   justify-content: center;
   align-items: center;
   max-width:210px;
-  margin-left: 35px;
+  // margin-left: 35px;
 
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
   padding: 10px;
@@ -151,11 +153,18 @@ h2{    display: flex;
   padding-left: 0;
   position: relative;
 }
+.container .weather-details .city-map {
+  // height: 300px;
+  max-width: 600px;
+  // transition: height 0.3s;
+  display: flex;
+  border-radius: 10px;
+}
 .container .daily-cards {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  max-width: 512px;
+  max-width: 90%;
   overflow-x: auto;
   padding: 15px;
   gap: 10px;
@@ -220,7 +229,7 @@ h2{    display: flex;
 	position: relative;
 	margin-top: 10px;
 	width: 100%;
-	min-width: 300px;
+	min-width: 380px;
 	height: 60px;
 	/* float: right; */
 	/* overflow: hidden; */
@@ -341,8 +350,18 @@ input[type="search"].sb-search-input {
 .no-js .sb-search .sb-search-submit {
 	z-index: 90;
 }
+.mapPopup p, .mapPopup h2{padding: 0 0 3px 0;color: #000;margin:0 !important}
+.mapPopup h2{font-size:18px;text-transform: capitalize;}
+@media screen and (max-width :1049px) {
+  .wrapper{width: 90%;box-sizing: border-box;}
+}
+@media (max-width: 768px) {
+  .city-map {
+    // height: 250px;
+  }
+}
 @media screen and (max-width :767px) {
-  .wrapper{margin: 0 20px;}
+  .wrapper{margin: 0 20px;width: 100%;box-sizing: border-box;}
   #result{font-size: 16px;}
 }
 @media screen and (max-width: 649px) {
@@ -353,6 +372,7 @@ input[type="search"].sb-search-input {
   .container .daily-cards {
     max-width: 360px;
   }
+  .sb-search{min-width: 300px;}
   .attr {
     width: 100%;
     bottom: 0;
@@ -392,5 +412,11 @@ input[type="search"].sb-search-input {
   }
   .container .daily-cards {
     max-width: 300px;
+  }
+  .container .weather-details .city-map {
+            margin: 15px 0 0 0;
+        max-width: 100%;
+        width: 100%;
+        height: 300px;
   }
 }

@@ -19,7 +19,7 @@ module.exports = (env, argv) => {
       main: './src/assets/js/app.js',
       styles: './src/assets/css/main.scss'
     },
-    output: {
+  output: {
   path: path.resolve(__dirname, 'dist'),
   filename: isProduction ? 'js/[name].[contenthash].js' : 'js/[name].js',
   publicPath: './', // 

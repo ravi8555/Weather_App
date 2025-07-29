@@ -10,20 +10,39 @@ const htmlPageNames = [
   { pageName: 'index.html', title: 'Weather APP with REST API' }
 ];
 
-module.exports = (env, argv) => ({
-  mode: argv.mode || 'development',
-  devtool: argv.mode === 'development' ? 'source-map' : false,
-  entry: ['./src/assets/js/app.js', './src/assets/css/main.scss'],
+module.exports = (env, argv) => {
+  const isProduction = argv.mode === 'production';
+  
+  return {
+    mode: argv.mode || 'development',
+    entry: {
+      main: './src/assets/js/app.js',
+      styles: './src/assets/css/main.scss'
+    },
   output: {
-     path: path.resolve(__dirname, 'dist'),
-    filename: 'js/[name].[contenthash].js',
-    publicPath: '',
-    clean: true // Ensure clean builds
-  },
-  optimization: {
-    splitChunks: { chunks: 'all' },
-  },
-  module: {
+  path: path.resolve(__dirname, 'dist'),
+  filename: isProduction ? 'js/[name].[contenthash].js' : 'js/[name].js',
+  publicPath: './', // 
+  clean: true
+},
+
+    plugins: [
+      new Dotenv(),
+      new CleanWebpackPlugin(),
+      new MiniCssExtractPlugin({
+        filename: isProduction ? 'css/[name].[contenthash].css' : 'css/[name].css'
+      }),
+      new HtmlWebpackPlugin({
+        filename: 'index.html',
+        template: './src/index.html',
+        inject: true, // Ensure injection
+        minify: isProduction ? {
+          collapseWhitespace: true,
+          removeComments: true
+        } : false
+      })
+    ],
+    module: {
     rules: [
       {
         test: /\.js$/,
@@ -86,33 +105,7 @@ module.exports = (env, argv) => ({
       module: false,
     },
   },
-  plugins: [
-    new Dotenv(),
-    new CleanWebpackPlugin(),
-    new MiniCssExtractPlugin({
-      filename: 'css/[name].[contenthash].css',
-    }),
-    new CopyPlugin({
-      patterns: [
-        { from: './src/assets/img', to: 'img' }
-      ],
-    }),
-    ...htmlPageNames.map(
-      (name) =>
-        new HtmlWebpackPlugin({
-          filename: name.pageName,
-          title: name.title,
-          template: path.resolve(__dirname, `src/${name.pageName}`),
-          inject: 'body', // Explicitly inject scripts in body
-          hash: true // Add hash to prevent caching issues
-        })
-    ),
-    new webpack.ProvidePlugin({
-      $: 'jquery',
-      jQuery: 'jquery',
-    }),
-  ],
-  devServer: {
+    devServer: {
     static: path.resolve(__dirname, 'dist'),
     port: 9000,
     open: true,
@@ -125,5 +118,7 @@ module.exports = (env, argv) => ({
       message: /Critical dependency/,
     },
   ],
-});
+  };
+};
+
 

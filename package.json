@@ -1,7 +1,7 @@
 {
   "name": "Weather App",
-  "homepage": "https://ravi8555.github.io/Weather_App",
   "version": "1.0.0",
+  "homepage": "https://ravi8555.github.io/Weather_App",
   "description": "Weather APP with REST API",
   "scripts": {
     "build": "webpack --mode production",

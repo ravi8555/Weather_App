@@ -19,19 +19,19 @@
 
         </style>
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-  <style>
+  <!-- <style>
     #map { height: 100vh; width: 100%; }
-  </style>
+  </style> -->
    </head>
    <body>
     
      <div id="map"></div>
-   		  <div class="wrapper" style="">
+   		  <div class="wrapper" style="display: block;">
 	   		<div class="container">
   <h1>Weather Forecast</h1>
   <div id="sb-search" class="sb-search">
 						<form id="weather-form">
-							<input class="sb-search-input" placeholder="Enter your search term..." type="search" name="search" id="location-input">
+							<input class="sb-search-input" placeholder="Enter your city name..." type="search" name="search" id="location-input">
 
 							<input type="submit" class="sb-search-submit" id="search-button" />
 
@@ -47,8 +47,7 @@
   <p class="errTxt" id="errTxt"></p>
   <div class="weather-details" id="weather-details">
     <h2>Weather In <span id="location"></span></h2>
-    <div class="grid">
-      
+    <div class="grid">     
       
       <div class="temperature">
         <div class="currDate" id="currentDate"></div> 
@@ -65,7 +64,11 @@
           
           <li><img src="https://portfoliohub.in/weatherapp/images/wind.svg" alt="wind-speed" width="64" height="64"><span id="wind-speed">0</span></li>
         </ul>
+        <div id="cityMap" class="city-map">
+          
+        </div>
     </div>
+    
     <h2 class="forecast7">7 Days Forecast</h2>
     <div class="daily-cards" id="daily-forecast"></div>
   </div>

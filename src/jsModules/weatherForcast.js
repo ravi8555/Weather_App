@@ -207,7 +207,7 @@ class ForecastWeather {
     constructor(city) {
       this.city = city;
       this.cache = new Map();
-      this.cacheExpiry = 60 * 60 * 1000;  
+      this.cacheExpiry = 5 * 60 * 1000;  
     }
 
     async getGeoLocation(location) {
@@ -271,9 +271,9 @@ class ForecastWeather {
   }
 }
 
-    async displayForecast() {
+    async displayForecast(cityName) {
       try {
-        const cityName = document.getElementById('location-input').value.trim();
+        const cityName = cityName || document.getElementById('location-input').value.trim();
         if (!cityName) return;
         
         const dataWeather = await this.getWeatherData(cityName);
@@ -284,15 +284,10 @@ class ForecastWeather {
         const imgSrc = `https://portfoliohub.in/weatherapp/images/${isDay ? weatherCondition.icons.day : weatherCondition.icons.night}`;
         
         // Update current weather
-        document.getElementById('location').textContent = cityName;
+        const splitCityval = cityName.split().join('')  
+        const firstLcap =  splitCityval[0].toUpperCase() + splitCityval.slice(1)
+        document.getElementById('location').textContent = firstLcap;
         const date = new Date(current.time)
-        // const dateOptions = {
-        //   weekday: 'long',    // "Sunday"
-        //   day: 'numeric',     // "20"
-        //   month: 'long'
-        // }
-        // const formatteddate = date.toLocaleDateString('en-us',dateOptions)
-
         const day = date.toLocaleDateString('en-US', { weekday: 'long' });
         const dayNum = date.getDate();
         const month = date.toLocaleDateString('en-US', { month: 'long' });
@@ -315,16 +310,18 @@ class ForecastWeather {
         const forecastDaily = document.getElementById('daily-forecast');
         forecastDaily.innerHTML = ''; // Clear previous forecast
 
-        for(let i = 0; i < 7; i++) {
+        for(let i = 1; i < 7; i++) {
           const dailyCode = daily.weather_code[i];
+          console.log("Daily Cards =>", dailyCode);
+          
           const weatherCond = weather_codes[dailyCode];
           const temperatureMax = daily.temperature_2m_max[i];
           const temperatureMin = daily.temperature_2m_min[i];
           const timeStamp = new Date(daily.time[i]).toLocaleDateString('en-US', { 
-  weekday: 'short', 
-  month: 'short', 
-  day: 'numeric' 
-});
+            weekday: 'short', 
+            month: 'short', 
+            day: 'numeric' 
+          });
 
           const divElement = document.createElement('div');
           divElement.className = 'forecast-day card';
@@ -347,43 +344,53 @@ class ForecastWeather {
       }
     }
 }
-// 93ed41b6-f387-48d0-820a-c11f9ce53017
 const weatherApp = new ForecastWeather();
+// 93ed41b6-f387-48d0-820a-c11f9ce53017
+
 
 // const searchBtn = document.getElementById('search-button');
 const errorMsg = document.getElementById('errTxt');
-const searchBox = document.getElementById('weather-form')
+const searchBox = document.getElementById('weather-form');
 
-searchBox.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const city = document.getElementById('location-input').value.trim();
-  const weatherDataElement = document.getElementById('weather-details');
-  
-  if (!city) {
-    errorMsg.textContent = 'Please enter the city name';
-    weatherDataElement.style.display = 'none';
-    return;
-  }
-  
-  errorMsg.textContent = '';
-  weatherDataElement.style.display = 'block';
 
+const loadMap = async (city)=>{
+  const cityMapContainer = document.getElementById('cityMap');
+ 
   try {
-    await weatherApp.displayForecast();
-  } catch (error) {
-    errorMsg.textContent = 'Failed to fetch weather data. Please try again.';
-    weatherDataElement.style.display = 'none';
-  }
-});
-const mapDiv = document.getElementById("map")
+    errorMsg.textContent = 'Loading map...';
+  
+     // Then load the map
+    const geoData = await weatherApp.getGeoLocation(city);
+    const { latitude, longitude, country, admin1 } = geoData;
 
-const worldMap = function initMap(){
-  const map = L.map('map').setView([19.07283, 72.88261], 4);
-//  const baseLayer = L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_watercolor/{z}/{x}/{y}.jpg?api_key=93ed41b6-f387-48d0-820a-c11f9ce53017', {
-//   minZoom: 1,
-//   maxZoom: 16,
-//   attribution: '©'
-// }).addTo(map);
+    // Ensure map container exists
+    if (!cityMapContainer) {
+      throw new Error('Map container not found');
+    }
+    errorMsg.textContent = 'Loading...';
+    // Set container styles
+    cityMapContainer.style.display = 'block';
+    cityMapContainer.style.height = '300px';
+
+    // Properly destroy previous map instance
+    if (window.cityMap) {
+      window.cityMap.remove();
+      window.cityMap = null;
+      cityMapContainer.innerHTML = ''; // Clear any leftover tiles
+    }
+    errorMsg.textContent = '';
+
+    // Recreate the container if needed
+    if (!document.getElementById('cityMap')) {
+      const newMapContainer = document.createElement('div');
+      newMapContainer.id = 'cityMap';
+      newMapContainer.className = 'city-map';
+      document.querySelector('.grid').appendChild(newMapContainer);
+    }
+
+    // Initialize new map
+    window.cityMap = L.map('cityMap').setView([latitude, longitude], 4);
+
 
 const baseLayer =  L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_watercolor/{z}/{x}/{y}.jpg?api_key='+ API_KEY);
 
@@ -394,13 +401,98 @@ const osmLayer = {
 };
 
 // Try watercolor first, fallback to OSM if it fails
-  baseLayer.addTo(map);
+  baseLayer.addTo(window.cityMap);
 
- map.on('tileerror', () => {
+ window.cityMap.on('tileerror', () => {
     map.removeLayer(watercolorLayer);
-    osmLayer.addTo(map);
+    osmLayer.addTo(window.cityMap);
   });
+
+    // Add marker
+    L.marker([latitude, longitude])
+      .addTo(window.cityMap)
+      .bindPopup(`<div class="mapPopup">
+  <h2>${city}</h2>
+  <p>Lat:${latitude} <br/> Lon:${longitude}</p>
+  <p>${admin1}</p>
+  <p>${country}</p>
+</div>`)
+      .openPopup();
+  } catch (error) {
+    console.error("Map loading error:", error);
+    throw error;
+  }
+}
+// display default weather info
+async function defaultCity(){
+  const lastCity = localStorage.getItem( 'lastCity')
+  const cityValue = lastCity || "Mumbai"
+  try { 
+    document.getElementById('location-input').value = cityValue   
+    await weatherApp.displayForecast(cityValue);
+    await loadMap(cityValue)
+    
+  } catch (error) {
+    console.error("Default city not fetch", error)
+  }
 }
 
-document.addEventListener('DOMContentLoaded', worldMap);
+document.addEventListener('DOMContentLoaded', defaultCity());
+
+searchBox.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const city = document.getElementById('location-input').value.trim();
+  const weatherDataElement = document.getElementById('weather-details');
+  // const cityMapContainer = document.getElementById('cityMap');
+  
+  if (!city) {
+    errorMsg.textContent = 'Please enter the city name';
+    weatherDataElement.style.display = 'none';
+    return;
+  }
+
+  errorMsg.textContent = 'Loading...';
+  weatherDataElement.style.display = 'block';
+
+  try {
+    // First get weather data
+    await weatherApp.displayForecast();
+    await loadMap(city)
+    localStorage.setItem('lastCity', city)
+    
+} catch (error) {
+    console.error("Error:", error);
+    errorMsg.textContent = `Failed to load: ${error.message}`;
+    weatherDataElement.style.display = 'none';
+  }
+});
+
+
+// const worldMap = function initMap(){
+//   const map = L.map('map').setView([19.07283, 72.88261], 4);
+// //  const baseLayer = L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_watercolor/{z}/{x}/{y}.jpg?api_key=93ed41b6-f387-48d0-820a-c11f9ce53017', {
+// //   minZoom: 1,
+// //   maxZoom: 16,
+// //   attribution: '©'
+// // }).addTo(map);
+
+// const baseLayer =  L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_watercolor/{z}/{x}/{y}.jpg?api_key='+ API_KEY);
+
+// const osmLayer = {
+//   "OSM Standard": L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'),
+//   "OSM Humanitarian": L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png'),
+//   "Watercolor": L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.jpg')
+// };
+
+// // Try watercolor first, fallback to OSM if it fails
+//   baseLayer.addTo(map);
+
+//  map.on('tileerror', () => {
+//     map.removeLayer(watercolorLayer);
+//     osmLayer.addTo(map);
+//   });
+// }
+
+// document.addEventListener('DOMContentLoaded', worldMap);
+
 
