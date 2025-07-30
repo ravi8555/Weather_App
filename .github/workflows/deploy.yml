@@ -1,4 +1,7 @@
 name: Deploy to GitHub Pages
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true  # Stops duplicate runs
 
 on:
   push:
@@ -8,6 +11,7 @@ on:
 
 jobs:
   deploy:
+    timeout-minutes: 5      # Prevents hanging 
     runs-on: ubuntu-latest
     permissions:
       contents: write  # Needed to push to gh-pages
