@@ -1,6 +1,7 @@
 # .gitignore
 config.js
 node_modules/
+node_modules
 package-lock.json/
 .env
 .vscode/
